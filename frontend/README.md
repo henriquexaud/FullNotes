@@ -1,4 +1,4 @@
-# Frontend (Vite + React + TypeScript)
+# FullNotes Front-end (Vite + React + TypeScript)
 
 Rodar em desenvolvimento:
 

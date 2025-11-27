@@ -1,9 +1,9 @@
-# NodeApi Monorepo (Frontend + Backend)
+# FullNotes Monorepo (Frontend + Backend)
 
 Estrutura:
 
-- `backend/` — Node.js + Express + TypeScript (porta 4000)
-- `frontend/` — Vite + React + TypeScript (dev server com proxy para backend)
+- `backend/` — FullNotes Back-end (Node.js + Express + TypeScript, porta 4000)
+- `frontend/` — FullNotes Front-end (Vite + React + TypeScript, dev server com proxy para backend)
 
 Para rodar localmente em desenvolvimento (em terminais separados):
 

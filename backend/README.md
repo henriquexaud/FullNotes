@@ -1,4 +1,4 @@
-# Backend (Express + TypeScript)
+# FullNotes Back-end (Express + TypeScript)
 
 Port: 4000
 
