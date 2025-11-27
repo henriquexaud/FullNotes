@@ -14,6 +14,11 @@ const styles = {
     fontFamily:
       '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
   } as React.CSSProperties,
+  content: {
+    maxWidth: "560px",
+    width: "100%",
+    margin: "0",
+  } as React.CSSProperties,
   header: {
     marginBottom: "16px",
   },
@@ -267,233 +272,236 @@ export default function App() {
         }
       `}</style>
       <div style={styles.container}>
-        <div style={styles.header}>
-          <h1 style={styles.headerTitle}>📝 Minhas Notas</h1>
-          <p style={styles.headerSubtitle}>Organize suas ideias</p>
-        </div>
+        <div style={styles.content}>
+          <div style={styles.header}>
+            <h1 style={styles.headerTitle}>📝 Minhas Notas</h1>
+            <p style={styles.headerSubtitle}>Organize suas ideias</p>
+          </div>
 
-        <div style={styles.formSection}>
-          <h2
-            style={{
-              fontSize: "13px",
-              fontWeight: "600",
-              color: "#2d3748",
-              margin: "0 0 8px 0",
-            }}
-          >
-            Nova nota
-          </h2>
-          <form onSubmit={handleAdd}>
-            <input
-              placeholder="Título"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              onFocus={() => setInputFocus("title")}
-              onBlur={() => setInputFocus(null)}
-              disabled={submitting}
+          <div style={styles.formSection}>
+            <h2
               style={{
-                ...styles.input,
-                ...(inputFocus === "title" ? styles.inputFocus : {}),
-                opacity: submitting ? 0.6 : 1,
-              }}
-            />
-            <textarea
-              placeholder="Conteúdo..."
-              value={content}
-              onChange={(e) => setContent(e.target.value)}
-              onFocus={() => setInputFocus("content")}
-              onBlur={() => setInputFocus(null)}
-              disabled={submitting}
-              style={{
-                ...styles.textarea,
-                ...(inputFocus === "content" ? styles.inputFocus : {}),
-                opacity: submitting ? 0.6 : 1,
-              }}
-            />
-            <button
-              type="submit"
-              disabled={submitting || !title.trim()}
-              style={{
-                ...styles.button,
-                ...styles.buttonPrimary,
-                opacity: submitting || !title.trim() ? 0.6 : 1,
-                cursor: submitting || !title.trim() ? "not-allowed" : "pointer",
-              }}
-              onMouseEnter={(e) => {
-                if (!submitting && title.trim()) {
-                  Object.assign(
-                    e.currentTarget.style,
-                    styles.buttonPrimaryHover
-                  );
-                }
-              }}
-              onMouseLeave={(e) => {
-                Object.assign(e.currentTarget.style, styles.buttonPrimary);
+                fontSize: "13px",
+                fontWeight: "600",
+                color: "#2d3748",
+                margin: "0 0 8px 0",
               }}
             >
-              {submitting ? "Salvando..." : "Adicionar"}
-            </button>
-          </form>
-        </div>
+              Nova nota
+            </h2>
+            <form onSubmit={handleAdd}>
+              <input
+                placeholder="Título"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                onFocus={() => setInputFocus("title")}
+                onBlur={() => setInputFocus(null)}
+                disabled={submitting}
+                style={{
+                  ...styles.input,
+                  ...(inputFocus === "title" ? styles.inputFocus : {}),
+                  opacity: submitting ? 0.6 : 1,
+                }}
+              />
+              <textarea
+                placeholder="Conteúdo..."
+                value={content}
+                onChange={(e) => setContent(e.target.value)}
+                onFocus={() => setInputFocus("content")}
+                onBlur={() => setInputFocus(null)}
+                disabled={submitting}
+                style={{
+                  ...styles.textarea,
+                  ...(inputFocus === "content" ? styles.inputFocus : {}),
+                  opacity: submitting ? 0.6 : 1,
+                }}
+              />
+              <button
+                type="submit"
+                disabled={submitting || !title.trim()}
+                style={{
+                  ...styles.button,
+                  ...styles.buttonPrimary,
+                  opacity: submitting || !title.trim() ? 0.6 : 1,
+                  cursor:
+                    submitting || !title.trim() ? "not-allowed" : "pointer",
+                }}
+                onMouseEnter={(e) => {
+                  if (!submitting && title.trim()) {
+                    Object.assign(
+                      e.currentTarget.style,
+                      styles.buttonPrimaryHover
+                    );
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  Object.assign(e.currentTarget.style, styles.buttonPrimary);
+                }}
+              >
+                {submitting ? "Salvando..." : "Adicionar"}
+              </button>
+            </form>
+          </div>
 
-        <div style={styles.notesSection}>
-          <h2
-            style={{
-              fontSize: "13px",
-              fontWeight: "600",
-              color: "#2d3748",
-              margin: "0 0 8px 0",
-            }}
-          >
-            Notas ({notes.length})
-          </h2>
+          <div style={styles.notesSection}>
+            <h2
+              style={{
+                fontSize: "13px",
+                fontWeight: "600",
+                color: "#2d3748",
+                margin: "0 0 8px 0",
+              }}
+            >
+              Notas ({notes.length})
+            </h2>
 
-          {loading ? (
-            <div style={styles.loadingState}>
-              <div style={styles.spinner}></div>
-              Carregando...
-            </div>
-          ) : notes.length === 0 ? (
-            <div style={styles.emptyState}>
-              <div style={styles.emptyStateIcon}>📭</div>
-              <p style={{ margin: 0, fontSize: "12px" }}>Nenhuma nota</p>
-            </div>
-          ) : (
-            <div style={styles.notesList}>
-              {notes.map((note) => (
-                <div
-                  key={note.id}
-                  style={{
-                    ...styles.noteItem,
-                    ...(notesHover === note.id ? styles.noteItemHover : {}),
-                  }}
-                  onMouseEnter={() => setNotesHover(note.id)}
-                  onMouseLeave={() => setNotesHover(null)}
-                >
-                  {editingId === note.id ? (
-                    <div>
-                      <input
-                        autoFocus
-                        value={editingTitle}
-                        onChange={(e) => setEditingTitle(e.target.value)}
-                        style={{
-                          ...styles.input,
-                          marginBottom: "8px",
-                        }}
-                      />
-                      <textarea
-                        value={editingContent}
-                        onChange={(e) => setEditingContent(e.target.value)}
-                        style={{
-                          ...styles.textarea,
-                          marginBottom: "8px",
-                        }}
-                      />
-                      <div style={styles.noteActions}>
-                        <button
-                          onClick={() => saveEdit()}
-                          disabled={!editingTitle.trim()}
+            {loading ? (
+              <div style={styles.loadingState}>
+                <div style={styles.spinner}></div>
+                Carregando...
+              </div>
+            ) : notes.length === 0 ? (
+              <div style={styles.emptyState}>
+                <div style={styles.emptyStateIcon}>📭</div>
+                <p style={{ margin: 0, fontSize: "12px" }}>Nenhuma nota</p>
+              </div>
+            ) : (
+              <div style={styles.notesList}>
+                {notes.map((note) => (
+                  <div
+                    key={note.id}
+                    style={{
+                      ...styles.noteItem,
+                      ...(notesHover === note.id ? styles.noteItemHover : {}),
+                    }}
+                    onMouseEnter={() => setNotesHover(note.id)}
+                    onMouseLeave={() => setNotesHover(null)}
+                  >
+                    {editingId === note.id ? (
+                      <div>
+                        <input
+                          autoFocus
+                          value={editingTitle}
+                          onChange={(e) => setEditingTitle(e.target.value)}
                           style={{
-                            ...styles.button,
-                            ...styles.buttonPrimary,
-                            opacity: !editingTitle.trim() ? 0.6 : 1,
+                            ...styles.input,
+                            marginBottom: "8px",
                           }}
-                          onMouseEnter={(e) => {
-                            if (editingTitle.trim()) {
+                        />
+                        <textarea
+                          value={editingContent}
+                          onChange={(e) => setEditingContent(e.target.value)}
+                          style={{
+                            ...styles.textarea,
+                            marginBottom: "8px",
+                          }}
+                        />
+                        <div style={styles.noteActions}>
+                          <button
+                            onClick={() => saveEdit()}
+                            disabled={!editingTitle.trim()}
+                            style={{
+                              ...styles.button,
+                              ...styles.buttonPrimary,
+                              opacity: !editingTitle.trim() ? 0.6 : 1,
+                            }}
+                            onMouseEnter={(e) => {
+                              if (editingTitle.trim()) {
+                                Object.assign(
+                                  e.currentTarget.style,
+                                  styles.buttonPrimaryHover
+                                );
+                              }
+                            }}
+                            onMouseLeave={(e) => {
                               Object.assign(
                                 e.currentTarget.style,
-                                styles.buttonPrimaryHover
+                                styles.buttonPrimary
                               );
-                            }
-                          }}
-                          onMouseLeave={(e) => {
-                            Object.assign(
-                              e.currentTarget.style,
-                              styles.buttonPrimary
-                            );
-                          }}
-                        >
-                          OK
-                        </button>
-                        <button
-                          onClick={() => setEditingId(null)}
-                          style={{
-                            ...styles.button,
-                            ...styles.buttonSecondary,
-                          }}
-                          onMouseEnter={(e) => {
-                            Object.assign(
-                              e.currentTarget.style,
-                              styles.buttonSecondaryHover
-                            );
-                          }}
-                          onMouseLeave={(e) => {
-                            Object.assign(
-                              e.currentTarget.style,
-                              styles.buttonSecondary
-                            );
-                          }}
-                        >
-                          Cancel
-                        </button>
+                            }}
+                          >
+                            OK
+                          </button>
+                          <button
+                            onClick={() => setEditingId(null)}
+                            style={{
+                              ...styles.button,
+                              ...styles.buttonSecondary,
+                            }}
+                            onMouseEnter={(e) => {
+                              Object.assign(
+                                e.currentTarget.style,
+                                styles.buttonSecondaryHover
+                              );
+                            }}
+                            onMouseLeave={(e) => {
+                              Object.assign(
+                                e.currentTarget.style,
+                                styles.buttonSecondary
+                              );
+                            }}
+                          >
+                            Cancel
+                          </button>
+                        </div>
                       </div>
-                    </div>
-                  ) : (
-                    <div>
-                      <h3 style={styles.noteTitle}>{note.title}</h3>
-                      <p style={styles.noteContent}>
-                        {note.content || "(vazio)"}
-                      </p>
-                      <div style={styles.noteActions}>
-                        <button
-                          onClick={() => startEdit(note)}
-                          style={{
-                            ...styles.button,
-                            ...styles.buttonSecondary,
-                          }}
-                          onMouseEnter={(e) => {
-                            Object.assign(
-                              e.currentTarget.style,
-                              styles.buttonSecondaryHover
-                            );
-                          }}
-                          onMouseLeave={(e) => {
-                            Object.assign(
-                              e.currentTarget.style,
-                              styles.buttonSecondary
-                            );
-                          }}
-                        >
-                          Editar
-                        </button>
-                        <button
-                          onClick={() => deleteNote(note.id)}
-                          style={{
-                            ...styles.button,
-                            ...styles.buttonDanger,
-                          }}
-                          onMouseEnter={(e) => {
-                            Object.assign(
-                              e.currentTarget.style,
-                              styles.buttonDangerHover
-                            );
-                          }}
-                          onMouseLeave={(e) => {
-                            Object.assign(
-                              e.currentTarget.style,
-                              styles.buttonDanger
-                            );
-                          }}
-                        >
-                          Excluir
-                        </button>
+                    ) : (
+                      <div>
+                        <h3 style={styles.noteTitle}>{note.title}</h3>
+                        <p style={styles.noteContent}>
+                          {note.content || "(vazio)"}
+                        </p>
+                        <div style={styles.noteActions}>
+                          <button
+                            onClick={() => startEdit(note)}
+                            style={{
+                              ...styles.button,
+                              ...styles.buttonSecondary,
+                            }}
+                            onMouseEnter={(e) => {
+                              Object.assign(
+                                e.currentTarget.style,
+                                styles.buttonSecondaryHover
+                              );
+                            }}
+                            onMouseLeave={(e) => {
+                              Object.assign(
+                                e.currentTarget.style,
+                                styles.buttonSecondary
+                              );
+                            }}
+                          >
+                            Editar
+                          </button>
+                          <button
+                            onClick={() => deleteNote(note.id)}
+                            style={{
+                              ...styles.button,
+                              ...styles.buttonDanger,
+                            }}
+                            onMouseEnter={(e) => {
+                              Object.assign(
+                                e.currentTarget.style,
+                                styles.buttonDangerHover
+                              );
+                            }}
+                            onMouseLeave={(e) => {
+                              Object.assign(
+                                e.currentTarget.style,
+                                styles.buttonDanger
+                              );
+                            }}
+                          >
+                            Excluir
+                          </button>
+                        </div>
                       </div>
-                    </div>
-                  )}
-                </div>
-              ))}
-            </div>
-          )}
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </>
